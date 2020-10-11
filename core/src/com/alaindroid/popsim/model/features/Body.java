@@ -3,6 +3,7 @@ package com.alaindroid.popsim.model.features;
 import com.alaindroid.popsim.util.RandomUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Synchronized;
 import lombok.experimental.Accessors;
 
 import java.util.function.Supplier;
@@ -56,6 +57,7 @@ public class Body {
                 health().currentHealth() <= fullness;
     }
 
+    @Synchronized
     public void eat(float deltaTime, Body otherBody) {
         float available = otherBody.health().currentHealth();
         float needed = health().maxHealth - health().currentHealth;

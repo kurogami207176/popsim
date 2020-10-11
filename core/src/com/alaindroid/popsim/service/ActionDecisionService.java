@@ -20,11 +20,12 @@ public class ActionDecisionService {
         boolean canMove = creature.movementRange().canMove();
         ActionType actionType;
         Optional<Creature> closest = CreatureDistanceUtil.findClosestEdibleLivingCreature(creature, otherLives);
-        if (canMove) {
+        if (!creature.body().alive()) {
+            actionType = ActionType.DEAD;
+        }
+        else if (canMove) {
             boolean isHungry = creature.body().isHungry();
-            boolean isReach = closest
-                    .map(target -> creature.reach().canReach(creature.location(), target.location()))
-                    .orElse(false);
+            boolean isReach = CreatureDistanceUtil.canReach(creature, closest);
             actionType = isHungry
                     ? isReach
                         ? ActionType.EAT

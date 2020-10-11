@@ -1,10 +1,7 @@
 package com.alaindroid.popsim.service;
 
 import com.alaindroid.popsim.model.action.ActionType;
-import com.alaindroid.popsim.service.seeker.EatService;
-import com.alaindroid.popsim.service.seeker.FoodSeekerService;
-import com.alaindroid.popsim.service.seeker.ActionService;
-import com.alaindroid.popsim.service.seeker.WanderService;
+import com.alaindroid.popsim.service.seeker.*;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -12,6 +9,7 @@ public class ActionFinderService {
     private final FoodSeekerService foodSeekerService;
     private final WanderService wanderService;
     private final EatService eatService;
+    private final DeadActionService deadActionService;
     public ActionService finderService(ActionType actionType) {
         switch (actionType) {
             case WANDER:
@@ -20,6 +18,8 @@ public class ActionFinderService {
                 return foodSeekerService;
             case EAT:
                 return eatService;
+            case DEAD:
+                return deadActionService;
         }
         return null;
     }

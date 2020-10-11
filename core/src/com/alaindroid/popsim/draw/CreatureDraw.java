@@ -16,15 +16,17 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 public class CreatureDraw {
     private static final int BAR_DIST = 2;
-    private static Color FIND_FOOD = Color.RED;
+    private static final int BAR_WIDTH = 6;
+    private static Color DEAD = Color.RED;
+    private static Color FIND_FOOD = Color.YELLOW;
     private static Color WANDER = Color.WHITE;
-    private static Color EAT = Color.FOREST;
+    private static Color EAT = Color.GREEN;
     private Creature creature;
 
     private Integer drawLevel;
     private Texture img;
     private Color color;
-    private float radius = 5;
+    private float radius;
 
     public void draw(SpriteBatch batch) {
         // batch.draw(img(), creature().location().x(), creature().location().y());
@@ -36,11 +38,12 @@ public class CreatureDraw {
         drawCreature(shapeRenderer, healthPercent, x, y);
 
         drawActionPath(shapeRenderer, creature.action(), x, y);
-        drawReach(shapeRenderer, x, y);
+        drawReach(shapeRenderer, creature.desire(), x, y);
     }
 
-    private void drawReach(ShapeRenderer shapeRenderer, float x, float y) {
+    private void drawReach(ShapeRenderer shapeRenderer, ActionType desiredActionType, float x, float y) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        matchColor(shapeRenderer, desiredActionType);
         if (creature.reach() != null) {
             shapeRenderer.circle(x, y, creature.reach().reach());
         }
@@ -50,35 +53,49 @@ public class CreatureDraw {
     private void drawActionPath(ShapeRenderer shapeRenderer, Action action, float x, float y) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         if (action != null) {
-            switch (action.actionType()) {
-                case WANDER:
-                    shapeRenderer.setColor(WANDER);
-                    break;
-                case FIND_FOOD:
-                    shapeRenderer.setColor(FIND_FOOD);
-                    break;
-                case EAT:
-                    shapeRenderer.setColor(EAT);
-                    break;
-            }
+            matchColor(shapeRenderer, action.actionType());
         }
         if (creature.action() != null) {
-            float xt = creature.action().target().x();
-            float yt = creature.action().target().y();
-            shapeRenderer.line(x, y, xt, yt);
+            if(creature.action().actionType() != ActionType.DEAD) {
+                shapeRenderer.line(x, y,
+                        creature.action().target().x(),
+                        creature.action().target().y());
+            }
+            else {
+                float w = 2 * radius;
+                shapeRenderer.line(x - w, y - w, x + w, y + w);
+                shapeRenderer.line(x + w, y - w, x - w, y + w);
+            }
         }
         shapeRenderer.end();
+    }
+
+    private void matchColor(ShapeRenderer shapeRenderer, ActionType actionType) {
+        switch (actionType) {
+            case WANDER:
+                shapeRenderer.setColor(WANDER);
+                break;
+            case FIND_FOOD:
+                shapeRenderer.setColor(FIND_FOOD);
+                break;
+            case EAT:
+                shapeRenderer.setColor(EAT);
+                break;
+            case DEAD:
+                shapeRenderer.setColor(DEAD);
+                break;
+        }
     }
 
     private void drawCreature(ShapeRenderer shapeRenderer, float healthPercent, float x, float y) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(color());
         shapeRenderer.circle(x, y, radius);
-        float x0 = x - radius;
-        float x1 = x0 + (2 * radius) * healthPercent;
+        float x0 = x - BAR_WIDTH;
+        float x1 = x0 + (2 * BAR_WIDTH) * healthPercent;
         float y0 = y - radius - BAR_DIST;
         float y1 = y - radius - BAR_DIST;
-        shapeRenderer.rectLine(x0, y0, x1, y1, 2);
+        shapeRenderer.rectLine(x0, y0, x1, y1, 3);
         shapeRenderer.end();
     }
 }

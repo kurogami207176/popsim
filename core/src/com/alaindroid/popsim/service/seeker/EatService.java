@@ -4,9 +4,6 @@ import com.alaindroid.popsim.model.Creature;
 import com.alaindroid.popsim.model.Terrain;
 import com.alaindroid.popsim.model.action.Action;
 import com.alaindroid.popsim.model.action.ActionType;
-import com.alaindroid.popsim.util.CreatureDistanceUtil;
-import com.alaindroid.popsim.util.CreatureFoodUtil;
-import com.alaindroid.popsim.util.CreatureMobilityUtil;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -28,7 +25,7 @@ public class EatService implements ActionService {
             return new Action(ActionType.EAT,
                     () -> creature.location(),
                     deltaTime -> creature.body().eat(deltaTime),
-                    () -> creature.body().health().currentHealth() < creature.body().health().maxHealth()
+                    () -> creature.body().alive() && creature.body().health().currentHealth() < creature.body().health().maxHealth()
             );
         }
     }

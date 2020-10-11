@@ -50,6 +50,8 @@ public class MobilityService {
         }
         if(creature.action() == null) {
             ActionDecisionService.ActionDecision decision = actionDecisionService.actionType(creature, otherLives);
+            creature.desire(decision.actionType());
+
             ActionService actionService = actionFinderService.finderService(decision.actionType());
             Action action = actionService.findTarget(creature, decision.closest(), otherLives, terrain);
             creature.action(action);

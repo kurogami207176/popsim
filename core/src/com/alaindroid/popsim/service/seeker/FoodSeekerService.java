@@ -4,9 +4,6 @@ import com.alaindroid.popsim.model.Creature;
 import com.alaindroid.popsim.model.Terrain;
 import com.alaindroid.popsim.model.action.Action;
 import com.alaindroid.popsim.model.action.ActionType;
-import com.alaindroid.popsim.util.CreatureDistanceUtil;
-import com.alaindroid.popsim.util.CreatureFoodUtil;
-import com.alaindroid.popsim.util.CreatureMobilityUtil;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -28,7 +25,7 @@ public class FoodSeekerService implements ActionService {
         return new Action(ActionType.FIND_FOOD,
                 () -> target.location(),
                 deltaTime -> thisCreature.body().expend(deltaTime),
-                () -> !thisCreature.reach().canReach(thisCreature.location(), target.location())
+                () -> thisCreature.body().alive() && !thisCreature.reach().canReach(thisCreature.location(), target.location())
         );
     }
 

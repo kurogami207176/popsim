@@ -7,8 +7,6 @@ import lombok.experimental.Accessors;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class CreatureDistanceUtil {
     public static Optional<Creature> findClosestEdibleLivingCreature(Creature creature, List<Creature> otherLives){
@@ -17,15 +15,20 @@ public class CreatureDistanceUtil {
                 .filter(otherLife -> CreatureMobilityUtil.canReachByJump(creature, otherLife))
                 .filter(otherLife -> otherLife.body().alive())
                 .map(o -> new Distance(creature, o))
+                .filter(d -> canSee(creature, d))
                 .sorted(Comparator.comparing(Distance::distance))
                 .map(Distance::creature)
                 .findFirst();
     }
 
-    public static boolean canReach(Creature creature, List<Creature> otherLives) {
-        return findClosestEdibleLivingCreature(creature, otherLives)
+    public static boolean canReach(Creature creature, Optional<Creature> otherLife) {
+        return otherLife
                 .map(target -> creature.reach().canReach(creature.location(), target.location()))
                 .orElse(false);
+    }
+
+    public static boolean canSee(Creature creature, Distance distance) {
+        return creature.vision().length() >= distance.distance();
     }
 
     @Value

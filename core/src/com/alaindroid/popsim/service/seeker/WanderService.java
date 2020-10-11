@@ -6,11 +6,8 @@ import com.alaindroid.popsim.model.Terrain;
 import com.alaindroid.popsim.model.action.Action;
 import com.alaindroid.popsim.model.action.ActionType;
 import com.alaindroid.popsim.model.features.Location;
-import com.alaindroid.popsim.util.DistanceUtil;
 import com.alaindroid.popsim.util.RandomUtil;
 import lombok.AllArgsConstructor;
-import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,18 +28,7 @@ public class WanderService implements ActionService {
         return new Action(ActionType.WANDER,
                 () -> target,
                 deltaTime -> creature.body().expend(deltaTime),
-                () -> !creature.body().isHungry() && !creature.reach().canReach(creature.location(), target)
+                () -> creature.body().alive() && !creature.reach().canReach(creature.location(), target)
                 );
-    }
-
-    @Value
-    @Accessors(fluent = true)
-    private class Distance {
-        private Creature creature;
-        private double distance;
-        public Distance(Creature origin, Creature thisLife) {
-            this.creature = thisLife;
-            this.distance = DistanceUtil.distance2D(origin.location(), thisLife.location());
-        }
     }
 }
