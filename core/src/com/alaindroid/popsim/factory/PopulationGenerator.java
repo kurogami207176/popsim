@@ -25,7 +25,6 @@ public class PopulationGenerator {
                             .mapToObj(i -> creatureGenerator.create(creatureType))
                             .collect(Collectors.toList()) )
                 .flatMap(List::stream)
-                .peek(c -> System.out.println(c))
                 .collect(Collectors.toList());
     }
 }

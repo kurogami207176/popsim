@@ -7,11 +7,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(fluent = true)
 @RequiredArgsConstructor
-public class Mobility {
-    private final float speed;
-    private final float jump;
-
-    public boolean canMove() {
-        return speed > 0 || jump > 0;
-    }
+public class Vision {
+    private final float length;
+    private final float angleRadian;
 }

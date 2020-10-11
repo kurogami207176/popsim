@@ -1,46 +1,35 @@
 package com.alaindroid.popsim.service.seeker;
 
 import com.alaindroid.popsim.model.Creature;
-import com.alaindroid.popsim.model.features.Location;
-import com.alaindroid.popsim.util.DistanceUtil;
-import lombok.Value;
-import lombok.experimental.Accessors;
+import com.alaindroid.popsim.model.Terrain;
+import com.alaindroid.popsim.model.action.Action;
+import com.alaindroid.popsim.model.action.ActionType;
+import com.alaindroid.popsim.util.CreatureDistanceUtil;
+import com.alaindroid.popsim.util.CreatureFoodUtil;
+import com.alaindroid.popsim.util.CreatureMobilityUtil;
+import lombok.AllArgsConstructor;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
-public class FoodSeekerService implements TargetFinderService {
+@AllArgsConstructor
+public class FoodSeekerService implements ActionService {
+
+    private WanderService wanderService;
 
     @Override
-    public Location findTarget(Creature creature, List<Creature> otherLives) {
-        return otherLives.stream()
-                .filter(otherLife -> isEdible(creature, otherLife))
-                .filter(otherLife -> canReachByJump(creature, otherLife))
-                .map(o -> new Distance(creature, o))
-                .sorted(Comparator.comparing(Distance::distance))
-                .map(Distance::creature)
-                .map(Creature::location)
-                .findFirst()
-                .orElse(null);
+    public Action findTarget(Creature creature, Optional<Creature> closest, List<Creature> otherLives, Terrain terrain) {
+        return closest
+                .map(target -> createAction(creature, target))
+                .orElse(wanderService.findTarget(creature, closest, otherLives, terrain));
     }
 
-    private boolean isEdible(Creature creature, Creature otherLife) {
-        return otherLife.traits().stream()
-                .anyMatch(creature.foods()::contains);
+    private Action createAction(Creature thisCreature, Creature target) {
+        return new Action(ActionType.FIND_FOOD,
+                () -> target.location(),
+                deltaTime -> thisCreature.body().expend(deltaTime),
+                () -> !thisCreature.reach().canReach(thisCreature.location(), target.location())
+        );
     }
 
-    private boolean canReachByJump(Creature creature, Creature otherLife) {
-        return otherLife.location().z() <= creature.movementRange().jump();
-    }
-
-    @Value
-    @Accessors(fluent = true)
-    private class Distance {
-        private Creature creature;
-        private double distance;
-        public Distance(Creature origin, Creature thisLife) {
-            this.creature = thisLife;
-            this.distance = DistanceUtil.distance2D(origin.location(), thisLife.location());
-        }
-    }
 }

@@ -6,12 +6,11 @@ import com.alaindroid.popsim.model.CreatureType;
 import com.alaindroid.popsim.model.Fauna;
 import com.alaindroid.popsim.model.Flora;
 import com.alaindroid.popsim.model.features.Location;
+import com.alaindroid.popsim.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Random;
-
-import static com.alaindroid.popsim.model.features.Mobility.BASIC_MOTION;
-import static com.alaindroid.popsim.model.features.Reach.BASIC_REACH;
+import static com.alaindroid.popsim.model.features.BaseFeatures.BASIC_MOTION;
+import static com.alaindroid.popsim.model.features.BaseFeatures.BASIC_REACH;
 
 @RequiredArgsConstructor
 public class CreatureGenerator {
@@ -19,7 +18,6 @@ public class CreatureGenerator {
     private static int counter = 0;
 
     private final DrawBox drawBox;
-    private Random random = new Random();
 
     public Creature create(CreatureType type) {
 
@@ -45,8 +43,8 @@ public class CreatureGenerator {
 
     private Location randomLocation() {
         return new Location(
-                drawBox.minX() + ((drawBox.maxX() - drawBox.minX()) * random.nextFloat()),
-                drawBox.minY() + ((drawBox.maxY() - drawBox.minY()) * random.nextFloat()),
+                RandomUtil.nextFloat(drawBox.minX(), drawBox.maxX()),
+                RandomUtil.nextFloat(drawBox.minY(), drawBox.maxY()),
                 0
         );
     }

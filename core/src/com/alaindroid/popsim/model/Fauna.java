@@ -1,8 +1,6 @@
 package com.alaindroid.popsim.model;
 
-import com.alaindroid.popsim.model.features.Mobility;
-import com.alaindroid.popsim.model.features.Reach;
-import com.alaindroid.popsim.model.features.Trait;
+import com.alaindroid.popsim.model.features.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -19,7 +17,8 @@ public class Fauna implements Life {
     private final String name;
     private final Mobility movementRange;
     private final Reach reach;
-    private boolean alive = true;
+    private final Vision vision = BaseFeatures.BASE_VISION;
+    private final Body body = BaseFeatures.BASE_BODY.get();
     private List<Trait> traits = Arrays.asList(Trait.ANIMAL);
     private List<Trait> foods = Arrays.asList(PLANT);
 

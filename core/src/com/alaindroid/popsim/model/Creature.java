@@ -1,7 +1,7 @@
 package com.alaindroid.popsim.model;
 
+import com.alaindroid.popsim.model.action.Action;
 import com.alaindroid.popsim.model.features.Location;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -16,5 +16,5 @@ public class Creature {
     private final Location location;
     private final CreatureType type;
 
-    private Location target;
+    private Action action;
 }

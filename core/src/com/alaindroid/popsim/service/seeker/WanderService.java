@@ -1,35 +1,38 @@
 package com.alaindroid.popsim.service.seeker;
 
+import com.alaindroid.popsim.draw.DrawBox;
 import com.alaindroid.popsim.model.Creature;
+import com.alaindroid.popsim.model.Terrain;
+import com.alaindroid.popsim.model.action.Action;
+import com.alaindroid.popsim.model.action.ActionType;
 import com.alaindroid.popsim.model.features.Location;
 import com.alaindroid.popsim.util.DistanceUtil;
+import com.alaindroid.popsim.util.RandomUtil;
+import lombok.AllArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 
-public class WanderService implements TargetFinderService {
+@AllArgsConstructor
+public class WanderService implements ActionService {
+    private DrawBox drawBox;
 
-    private Random random = new Random();
     @Override
-    public Location findTarget(Creature creature, List<Creature> otherLives) {
-        Location loc = creature.location();
-        float randX = random.nextInt(200) - 100;
-        float randY = random.nextInt(200) - 100;
-        return new Location(loc.x() + randX,
-                loc.y() + randY,
-                loc.z());
-    }
-
-    private boolean isEdible(Creature creature, Creature otherLife) {
-        return otherLife.traits().stream()
-                .anyMatch(creature.foods()::contains);
-    }
-
-    private boolean canReachByJump(Creature creature, Creature otherLife) {
-        return otherLife.location().z() <= creature.movementRange().jump();
+    public Action findTarget(Creature creature, Optional<Creature> closest, List<Creature> otherLives, Terrain terrain) {
+        float angT = RandomUtil.nextFloat(Math.PI);
+        float ranL = RandomUtil.nextFloat(-creature.vision().length(), creature.vision().length());
+        Location location = creature.location();
+        float xT = location.x() + (float) Math.cos(angT) * ranL;
+        float yT = location.y() + (float) Math.sin(angT) * ranL;
+        Location target = new Location(xT, yT, creature.location().z());
+        drawBox.clip(target);
+        return new Action(ActionType.WANDER,
+                () -> target,
+                deltaTime -> creature.body().expend(deltaTime),
+                () -> !creature.body().isHungry() && !creature.reach().canReach(creature.location(), target)
+                );
     }
 
     @Value

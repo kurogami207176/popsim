@@ -1,8 +1,6 @@
 package com.alaindroid.popsim.model;
 
-import com.alaindroid.popsim.model.features.Mobility;
-import com.alaindroid.popsim.model.features.Reach;
-import com.alaindroid.popsim.model.features.Trait;
+import com.alaindroid.popsim.model.features.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -17,9 +15,10 @@ import static com.alaindroid.popsim.model.features.Trait.*;
 @RequiredArgsConstructor
 public class Flora implements Life{
     private final String name;
-    private Mobility movementRange = Mobility.NO_MOTION;
-    private Reach reach = Reach.NO_REACH;
-    private boolean alive = true;
+    private Mobility movementRange = BaseFeatures.NO_MOTION;
+    private Reach reach = BaseFeatures.NO_REACH;
+    private final Vision vision = BaseFeatures.NO_VISION;
+    private Body body = BaseFeatures.BASE_BODY.get();
     private List<Trait> traits = Arrays.asList(Trait.PLANT);
     private List<Trait> foods = Arrays.asList(SUNLIGHT, LAND, AIR, WATER);
 }

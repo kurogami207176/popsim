@@ -16,7 +16,4 @@ public class Reach {
         return reach >= DistanceUtil.distance2D(myLocation, otherLocation);
     }
 
-    public static Reach NO_REACH = new Reach(0,0);
-    public static Reach BASIC_REACH = new Reach(10,0);
-
 }
