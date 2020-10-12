@@ -32,12 +32,11 @@ public class CreatureDraw {
         // batch.draw(img(), creature().location().x(), creature().location().y());
     }
     public void draw(ShapeRenderer shapeRenderer) {
-        float healthPercent = creature.body().healthPercent();
         float x = creature.location().x();
         float y = creature.location().y();
-        drawCreature(shapeRenderer, healthPercent, x, y);
+        drawCreature(shapeRenderer, x, y);
 
-        drawActionPath(shapeRenderer, creature.action(), x, y);
+        drawActionPath(shapeRenderer, x, y);
         drawReach(shapeRenderer, creature.desire(), x, y);
     }
 
@@ -50,10 +49,10 @@ public class CreatureDraw {
         shapeRenderer.end();
     }
 
-    private void drawActionPath(ShapeRenderer shapeRenderer, Action action, float x, float y) {
+    private void drawActionPath(ShapeRenderer shapeRenderer, float x, float y) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        if (action != null) {
-            matchColor(shapeRenderer, action.actionType());
+        if (creature.action() != null) {
+            matchColor(shapeRenderer, creature.action().actionType());
         }
         if (creature.action() != null) {
             if(creature.action().actionType() != ActionType.DEAD) {
@@ -66,6 +65,28 @@ public class CreatureDraw {
                 shapeRenderer.line(x - w, y - w, x + w, y + w);
                 shapeRenderer.line(x + w, y - w, x - w, y + w);
             }
+        }
+        shapeRenderer.end();
+    }
+
+    private void drawCreature(ShapeRenderer shapeRenderer, float x, float y) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(color());
+        shapeRenderer.circle(x, y, radius);
+        float x0 = x - BAR_WIDTH;
+        float x1 = x0 + (2 * BAR_WIDTH) * creature.body().healthPercent();
+        float y0 = y - radius - BAR_DIST;
+        float y1 = y - radius - BAR_DIST;
+        shapeRenderer.rectLine(x0, y0, x1, y1, 3);
+        // hunger
+        if (creature.hunger().isHungry()) {
+            float xt0 = x;
+            float yt0 = y + radius * 2;
+            float xt1 = x - radius;
+            float yt1 = y + radius;
+            float xt2 = x + radius;
+            float yt2 = y + radius;
+            shapeRenderer.triangle(xt0, yt0, xt1, yt1, xt2, yt2);
         }
         shapeRenderer.end();
     }
@@ -87,15 +108,4 @@ public class CreatureDraw {
         }
     }
 
-    private void drawCreature(ShapeRenderer shapeRenderer, float healthPercent, float x, float y) {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(color());
-        shapeRenderer.circle(x, y, radius);
-        float x0 = x - BAR_WIDTH;
-        float x1 = x0 + (2 * BAR_WIDTH) * healthPercent;
-        float y0 = y - radius - BAR_DIST;
-        float y1 = y - radius - BAR_DIST;
-        shapeRenderer.rectLine(x0, y0, x1, y1, 3);
-        shapeRenderer.end();
-    }
 }

@@ -1,25 +1,9 @@
 package com.alaindroid.popsim;
 
-import com.alaindroid.popsim.draw.DrawBox;
-import com.alaindroid.popsim.factory.CreatureDrawGenerator;
-import com.alaindroid.popsim.factory.CreatureGenerator;
-import com.alaindroid.popsim.factory.PopulationGenerator;
-import com.alaindroid.popsim.model.Terrain;
-import com.alaindroid.popsim.model.features.BaseFeatures;
 import com.alaindroid.popsim.modules.DaggerInjectorModule;
-import com.alaindroid.popsim.modules.MainComponent;
-import com.alaindroid.popsim.service.ActionDecisionService;
-import com.alaindroid.popsim.service.ActionFinderService;
-import com.alaindroid.popsim.service.MobilityService;
-import com.alaindroid.popsim.service.seeker.DeadActionService;
-import com.alaindroid.popsim.service.seeker.EatService;
-import com.alaindroid.popsim.service.seeker.FoodSeekerService;
-import com.alaindroid.popsim.service.seeker.WanderService;
 import com.alaindroid.popsim.states.MainSimulation;
 import com.alaindroid.popsim.states.StateTypes;
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import javax.inject.Inject;
 

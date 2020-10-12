@@ -24,7 +24,7 @@ public class FoodSeekerService implements ActionService {
     private Action createAction(Creature thisCreature, Creature target) {
         return new Action(ActionType.FIND_FOOD,
                 () -> target.location(),
-                deltaTime -> thisCreature.body().expend(deltaTime),
+                deltaTime -> thisCreature.hunger().expend(deltaTime),
                 () -> thisCreature.body().alive() && !thisCreature.reach().canReach(thisCreature.location(), target.location())
         );
     }

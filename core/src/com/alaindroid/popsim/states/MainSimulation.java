@@ -7,8 +7,7 @@ import com.alaindroid.popsim.factory.PopulationGenerator;
 import com.alaindroid.popsim.model.Creature;
 import com.alaindroid.popsim.model.CreatureType;
 import com.alaindroid.popsim.model.Terrain;
-import com.alaindroid.popsim.service.MobilityService;
-import com.alaindroid.popsim.service.seeker.WanderService;
+import com.alaindroid.popsim.service.CreaturesService;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,9 +28,9 @@ public class MainSimulation {
     final CreatureDrawGenerator creatureDrawGenerator;
     final DrawBox drawBox;
     final PopulationGenerator populationGenerator;
-    final WanderService wanderService;
     final Terrain terrain;
-    final MobilityService mobilityService;
+    final CreaturesService creaturesService;
+
     SpriteBatch batch;
     ShapeRenderer shapeRenderer;
     List<Creature> creatures;
@@ -59,7 +58,7 @@ public class MainSimulation {
     public void render () {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        mobilityService.moveCreatures(simSpeed * Gdx.graphics.getDeltaTime(),
+        creaturesService.moveCreatures(simSpeed * Gdx.graphics.getDeltaTime(),
                 creatures,
                 terrain);
         batch.begin();

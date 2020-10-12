@@ -5,6 +5,7 @@ import com.alaindroid.popsim.model.Creature;
 import com.alaindroid.popsim.model.CreatureType;
 import com.alaindroid.popsim.model.Fauna;
 import com.alaindroid.popsim.model.Flora;
+import com.alaindroid.popsim.model.features.Hunger;
 import com.alaindroid.popsim.model.features.Location;
 import com.alaindroid.popsim.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +24,25 @@ public class CreatureGenerator {
 
         switch (type) {
             case ANIMAL:
-                return new Creature(
-                        new Fauna("generic_animal_" + counter++,
-                                BASIC_MOTION,
-                                BASIC_REACH
-                                ),
+                Fauna fauna = new Fauna("generic_animal_" + counter++,
+                        BASIC_MOTION,
+                        BASIC_REACH);
+                return new Creature(fauna,
                         randomLocation(),
-                        type
+                        type,
+                        new Hunger(fauna.body().health().currentHealth(),
+                                fauna.body(),
+                                fauna.satiaty())
                 );
             case PLANT:
+                Flora flora = new Flora("generic_plant_" + counter++);
                 return new Creature(
-                        new Flora("generic_plant_" + counter++),
+                        flora,
                         randomLocation(),
-                        type
+                        type,
+                        new Hunger(flora.body().health().currentHealth(),
+                                flora.body(),
+                                flora.satiaty())
                 );
         }
         return null;

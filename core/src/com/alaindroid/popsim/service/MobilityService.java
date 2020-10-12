@@ -4,7 +4,6 @@ import com.alaindroid.popsim.draw.DrawBox;
 import com.alaindroid.popsim.model.Creature;
 import com.alaindroid.popsim.model.Terrain;
 import com.alaindroid.popsim.model.action.Action;
-import com.alaindroid.popsim.model.action.ActionType;
 import com.alaindroid.popsim.model.features.Location;
 import com.alaindroid.popsim.model.features.Mobility;
 import com.alaindroid.popsim.service.seeker.ActionService;
@@ -14,7 +13,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,18 +22,8 @@ public class MobilityService {
     private final ActionFinderService actionFinderService;
     private final DrawBox drawBox;
 
-    public void moveCreatures(float deltaTime, List<Creature> allLives, Terrain terrain) {
-        for (int i = 0; i <allLives.size(); i++) {
-            Creature thisCreature = allLives.get(i);
-            List<Creature> otherCreatures = new ArrayList<>(allLives);
-            otherCreatures.remove(i);
-
-            action(deltaTime, thisCreature, otherCreatures, terrain);
-            move(deltaTime, thisCreature);
-        }
-    }
-
-    private void move(float deltaTime, Creature creature) {
+    public void move(float deltaTime, Creature creature, List<Creature> otherLives, Terrain terrain) {
+        action(deltaTime, creature, otherLives, terrain);
         if(creature.reach().canReach(creature.location(), creature.action().target())) {
             return;
         }

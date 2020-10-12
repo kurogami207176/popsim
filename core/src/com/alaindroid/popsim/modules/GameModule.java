@@ -15,7 +15,7 @@ public class GameModule {
     @Singleton
     @Named("simSpeed")
     public float simSpeed() {
-        return 1f;
+        return 2f;
     }
 
     @Provides

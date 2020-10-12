@@ -3,6 +3,7 @@ package com.alaindroid.popsim.modules;
 import com.alaindroid.popsim.draw.DrawBox;
 import com.alaindroid.popsim.service.ActionDecisionService;
 import com.alaindroid.popsim.service.ActionFinderService;
+import com.alaindroid.popsim.service.CreaturesService;
 import com.alaindroid.popsim.service.MobilityService;
 import com.alaindroid.popsim.service.seeker.DeadActionService;
 import com.alaindroid.popsim.service.seeker.EatService;
@@ -46,6 +47,12 @@ public class ServiceModule {
 
     @Provides
     @Singleton
+    public CreaturesService creaturesService(MobilityService mobilityService) {
+        return new CreaturesService(mobilityService);
+    }
+
+    @Provides
+    @Singleton
     public FoodSeekerService foodSeekerService(WanderService wanderService) {
         return new FoodSeekerService(wanderService);
     }
@@ -54,11 +61,13 @@ public class ServiceModule {
     public WanderService wanderService(DrawBox drawBox) {
         return new WanderService(drawBox);
     }
+
     @Provides
     @Singleton
     public EatService eatService(WanderService wanderService) {
         return new EatService(wanderService);
     }
+
     @Provides
     @Singleton
     public DeadActionService deadActionService() {

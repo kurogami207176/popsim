@@ -10,7 +10,11 @@ public interface Life {
     Reach reach();
     Vision vision();
     Body body();
+    Satiaty satiaty();
+
     List<Trait> traits();
+
+    Reproduction reproduction();
 
     List<Trait> foods();
 }

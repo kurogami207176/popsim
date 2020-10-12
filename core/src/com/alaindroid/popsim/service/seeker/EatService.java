@@ -24,7 +24,7 @@ public class EatService implements ActionService {
         else {
             return new Action(ActionType.EAT,
                     () -> creature.location(),
-                    deltaTime -> creature.body().eat(deltaTime),
+                    deltaTime -> creature.hunger().eat(deltaTime),
                     () -> creature.body().alive() && creature.body().health().currentHealth() < creature.body().health().maxHealth()
             );
         }
@@ -33,8 +33,8 @@ public class EatService implements ActionService {
     private Action createAction(Creature creature, Creature target) {
         return new Action(ActionType.EAT,
                 () -> target.location(),
-                deltaTime -> creature.body().eat(deltaTime, target.body()),
-                creature.body().eatUntilFull(target.body())
+                deltaTime -> creature.hunger().eat(deltaTime, target.body()),
+                creature.hunger().eatUntilFull(target.body())
         );
     }
 }

@@ -24,7 +24,7 @@ public class ActionDecisionService {
             actionType = ActionType.DEAD;
         }
         else if (canMove) {
-            boolean isHungry = creature.body().isHungry();
+            boolean isHungry = creature.hunger().isHungry();
             boolean isReach = CreatureDistanceUtil.canReach(creature, closest);
             actionType = isHungry
                     ? isReach

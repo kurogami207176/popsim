@@ -2,6 +2,7 @@ package com.alaindroid.popsim.model;
 
 import com.alaindroid.popsim.model.action.Action;
 import com.alaindroid.popsim.model.action.ActionType;
+import com.alaindroid.popsim.model.features.Hunger;
 import com.alaindroid.popsim.model.features.Location;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class Creature {
     private final Location location;
     private final CreatureType type;
 
+    private final Hunger hunger;
     private ActionType desire;
     private Action action;
 }

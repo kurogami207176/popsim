@@ -27,7 +27,7 @@ public class WanderService implements ActionService {
         drawBox.clip(target);
         return new Action(ActionType.WANDER,
                 () -> target,
-                deltaTime -> creature.body().expend(deltaTime),
+                deltaTime -> creature.hunger().expend(deltaTime),
                 () -> creature.body().alive() && !creature.reach().canReach(creature.location(), target)
                 );
     }
