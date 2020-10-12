@@ -3,42 +3,35 @@ package com.alaindroid.popsim.states;
 import com.alaindroid.popsim.draw.CreatureDraw;
 import com.alaindroid.popsim.draw.DrawBox;
 import com.alaindroid.popsim.factory.CreatureDrawGenerator;
-import com.alaindroid.popsim.factory.CreatureGenerator;
 import com.alaindroid.popsim.factory.PopulationGenerator;
 import com.alaindroid.popsim.model.Creature;
 import com.alaindroid.popsim.model.CreatureType;
 import com.alaindroid.popsim.model.Terrain;
-import com.alaindroid.popsim.model.features.BaseFeatures;
-import com.alaindroid.popsim.service.ActionDecisionService;
-import com.alaindroid.popsim.service.ActionFinderService;
 import com.alaindroid.popsim.service.MobilityService;
-import com.alaindroid.popsim.service.seeker.DeadActionService;
-import com.alaindroid.popsim.service.seeker.EatService;
-import com.alaindroid.popsim.service.seeker.FoodSeekerService;
 import com.alaindroid.popsim.service.seeker.WanderService;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MainSimulation {
 
-    float simSpeed;
+    final float simSpeed;
 
-    CreatureDrawGenerator creatureDrawGenerator;
-    DrawBox drawBox;
-    PopulationGenerator populationGenerator;
-    WanderService wanderService;
-    Terrain terrain;
-    MobilityService mobilityService;
+    final CreatureDrawGenerator creatureDrawGenerator;
+    final DrawBox drawBox;
+    final PopulationGenerator populationGenerator;
+    final WanderService wanderService;
+    final Terrain terrain;
+    final MobilityService mobilityService;
     SpriteBatch batch;
     ShapeRenderer shapeRenderer;
     List<Creature> creatures;
@@ -51,8 +44,8 @@ public class MainSimulation {
         Texture plantTexture = new Texture("green-circle-16.png");
 
         Map<CreatureType, Integer> counter = new HashMap<>();
-        counter.put(CreatureType.ANIMAL, 10);
-        counter.put(CreatureType.PLANT, 20);
+        counter.put(CreatureType.ANIMAL, 100);
+        counter.put(CreatureType.PLANT, 200);
         drawBox.adjust(0, Gdx.graphics.getWidth(), 0, Gdx.graphics.getHeight());
 
         creatureDrawGenerator.setAnimalTexture(animalTexture);

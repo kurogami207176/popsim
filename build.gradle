@@ -14,7 +14,7 @@ buildscript {
         classpath 'org.gretty:gretty:3.0.2'
         classpath 'com.android.tools.build:gradle:4.0.0'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.10'
-        
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.21"
 
     }
 }
@@ -79,7 +79,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        
+
     }
 }
 
@@ -121,7 +121,7 @@ project(":html") {
 
 project(":core") {
     apply plugin: "java-library"
-
+//    apply plugin: "net.ltgt.apt"
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -130,16 +130,15 @@ project(":core") {
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
 
         // https://mvnrepository.com/artifact/com.google.dagger/dagger
-        implementation "com.google.dagger:dagger:$daggerVersion"
-        implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+        api "com.google.dagger:dagger:$daggerVersion"
+//        api "com.google.dagger:dagger-android-support:$daggerVersion"
         annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-        annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+//        annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
 
         compileOnly "org.projectlombok:lombok:$lombokVersion"
         annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
         testCompileOnly "org.projectlombok:lombok:$lombokVersion"
         testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
-
     }
 }

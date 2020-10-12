@@ -9,8 +9,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Wanderer";
 		config.useGL30 = true;
-		config.height = 800;
-		config.width = 600;
+		config.height = 900;
+		config.width = 1280;
 		new LwjglApplication(new MainGame(), config);
 	}
 }
