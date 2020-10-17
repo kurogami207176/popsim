@@ -6,6 +6,7 @@ import com.alaindroid.popsim.model.Terrain;
 import com.alaindroid.popsim.model.action.Action;
 import com.alaindroid.popsim.model.action.ActionType;
 import com.alaindroid.popsim.model.features.Location;
+import com.alaindroid.popsim.model.stats.CreatureSnapshot;
 import com.alaindroid.popsim.util.RandomUtil;
 import lombok.AllArgsConstructor;
 
@@ -17,7 +18,7 @@ public class WanderService implements ActionService {
     private DrawBox drawBox;
 
     @Override
-    public Action findTarget(Creature creature, Optional<Creature> closest, List<Creature> otherLives, Terrain terrain) {
+    public Action findTarget(Creature creature, Optional<CreatureSnapshot> closest, List<CreatureSnapshot> otherLives, Terrain terrain) {
         float angT = RandomUtil.nextFloat(Math.PI);
         float ranL = RandomUtil.nextFloat(-creature.vision().length(), creature.vision().length());
         Location location = creature.location();

@@ -1,5 +1,7 @@
 package com.alaindroid.popsim.model.features;
 
+import com.alaindroid.popsim.model.Terrain;
+import com.alaindroid.popsim.util.CreatureFoodUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Synchronized;
@@ -19,6 +21,10 @@ public class Hunger {
         return fullnessLevel < satiaty.hungerLevel();
     }
 
+    public float excessFullness() {
+        return Math.max(0, fullnessLevel - satiaty.fullnessLevel());
+    }
+
     public void expend(float quantity) {
         if (fullnessLevel == 0) {
             body.health().currentHealth( Math.max(body.health().currentHealth() - quantity, 0) );
@@ -28,6 +34,10 @@ public class Hunger {
 
     public Supplier<Boolean> eatUntilFull(Body foodBody) {
         return () -> foodBody.alive() && fullnessLevel <= satiaty.findFullnessLevel();
+    }
+
+    public Supplier<Boolean> eatUntilFull(Terrain terrain) {
+        return () -> fullnessLevel <= satiaty.findFullnessLevel();
     }
 
     @Synchronized
@@ -45,7 +55,12 @@ public class Hunger {
 
     public void eat(float deltaTime) {
         float quantity = satiaty().eatRate() * deltaTime;
-        body.health().currentHealth( Math.min(body.health().currentHealth() + quantity, body.health().maxHealth()) );
+        if (body.health().currentHealth() < body.health().maxHealth()) {
+            body.health().currentHealth( Math.min(body.health().currentHealth() + quantity, body.health().maxHealth()) );
+        }
+        else {
+            fullnessLevel = fullnessLevel + quantity;
+        }
     }
 
 }

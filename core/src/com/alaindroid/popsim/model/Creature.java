@@ -4,6 +4,8 @@ import com.alaindroid.popsim.model.action.Action;
 import com.alaindroid.popsim.model.action.ActionType;
 import com.alaindroid.popsim.model.features.Hunger;
 import com.alaindroid.popsim.model.features.Location;
+import com.alaindroid.popsim.model.stats.Memory;
+import com.alaindroid.popsim.model.stats.Observation;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -19,6 +21,8 @@ public class Creature {
     private final CreatureType type;
 
     private final Hunger hunger;
+    private Observation observation = new Observation();
+    private Memory memory = new Memory();
     private ActionType desire;
     private Action action;
 }

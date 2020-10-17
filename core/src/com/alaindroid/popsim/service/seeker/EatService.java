@@ -4,6 +4,7 @@ import com.alaindroid.popsim.model.Creature;
 import com.alaindroid.popsim.model.Terrain;
 import com.alaindroid.popsim.model.action.Action;
 import com.alaindroid.popsim.model.action.ActionType;
+import com.alaindroid.popsim.model.stats.CreatureSnapshot;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class EatService implements ActionService {
     private final WanderService wanderService;
 
     @Override
-    public Action findTarget(Creature creature, Optional<Creature> closest, List<Creature> otherLives, Terrain terrain) {
+    public Action findTarget(Creature creature, Optional<CreatureSnapshot> closest, List<CreatureSnapshot> otherLives, Terrain terrain) {
         if (creature.movementRange().canMove()) {
             return closest
                     .map(target -> createAction(creature, target))
@@ -25,16 +26,16 @@ public class EatService implements ActionService {
             return new Action(ActionType.EAT,
                     () -> creature.location(),
                     deltaTime -> creature.hunger().eat(deltaTime),
-                    () -> creature.body().alive() && creature.body().health().currentHealth() < creature.body().health().maxHealth()
+                    creature.hunger().eatUntilFull(terrain)
             );
         }
     }
 
-    private Action createAction(Creature creature, Creature target) {
+    private Action createAction(Creature creature, CreatureSnapshot target) {
         return new Action(ActionType.EAT,
                 () -> target.location(),
-                deltaTime -> creature.hunger().eat(deltaTime, target.body()),
-                creature.hunger().eatUntilFull(target.body())
+                deltaTime -> creature.hunger().eat(deltaTime, target.creatureReference().body()),
+                creature.hunger().eatUntilFull(target.creatureReference().body())
         );
     }
 }

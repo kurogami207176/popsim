@@ -34,17 +34,20 @@ public class MainSimulation {
     SpriteBatch batch;
     ShapeRenderer shapeRenderer;
     List<Creature> creatures;
-    List<CreatureDraw> creatureDraws;
+
+    Texture animalTexture;
+    Texture plantTexture;
 
     public void create () {
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
-        Texture animalTexture = new Texture("brown-circle-16.png");
-        Texture plantTexture = new Texture("green-circle-16.png");
+
+        animalTexture = new Texture("brown-circle-16.png");
+        plantTexture = new Texture("green-circle-16.png");
 
         Map<CreatureType, Integer> counter = new HashMap<>();
-        counter.put(CreatureType.ANIMAL, 100);
-        counter.put(CreatureType.PLANT, 200);
+        counter.put(CreatureType.ANIMAL, 10);
+        counter.put(CreatureType.PLANT, 10);
         drawBox.adjust(0, Gdx.graphics.getWidth(), 0, Gdx.graphics.getHeight());
 
         creatureDrawGenerator.setAnimalTexture(animalTexture);
@@ -61,6 +64,7 @@ public class MainSimulation {
         creaturesService.moveCreatures(simSpeed * Gdx.graphics.getDeltaTime(),
                 creatures,
                 terrain);
+        List<CreatureDraw> creatureDraws = generateCreatureDraw();
         batch.begin();
         creatureDraws.forEach( c -> c.draw(batch) );
         batch.end();
@@ -69,15 +73,16 @@ public class MainSimulation {
 
     public void dispose () {
         batch.dispose();
-        creatureDraws.forEach( c -> c.img().dispose() );
+        animalTexture.dispose();
+        plantTexture.dispose();
     }
 
-    private void generateCreatureDraw() {
-        creatureDraws = creatureDrawGenerator.generateCreatures(creatures);
+    private List<CreatureDraw> generateCreatureDraw() {
+        List<CreatureDraw> creatureDraws = creatureDrawGenerator.generateCreatures(creatures);
         Map<Integer, List<CreatureDraw>> drawLevelCreature = creatureDraws
                 .stream()
                 .collect(Collectors.groupingBy(CreatureDraw::drawLevel, Collectors.toList()));
-        creatureDraws = drawLevelCreature.keySet().stream()
+        return drawLevelCreature.keySet().stream()
                 .sorted(Integer::compareTo)
                 .map(drawLevelCreature::get)
                 .flatMap(List::stream)

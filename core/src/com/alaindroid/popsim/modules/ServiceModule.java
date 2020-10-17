@@ -1,10 +1,8 @@
 package com.alaindroid.popsim.modules;
 
 import com.alaindroid.popsim.draw.DrawBox;
-import com.alaindroid.popsim.service.ActionDecisionService;
-import com.alaindroid.popsim.service.ActionFinderService;
-import com.alaindroid.popsim.service.CreaturesService;
-import com.alaindroid.popsim.service.MobilityService;
+import com.alaindroid.popsim.factory.CreatureGenerator;
+import com.alaindroid.popsim.service.*;
 import com.alaindroid.popsim.service.seeker.DeadActionService;
 import com.alaindroid.popsim.service.seeker.EatService;
 import com.alaindroid.popsim.service.seeker.FoodSeekerService;
@@ -47,8 +45,21 @@ public class ServiceModule {
 
     @Provides
     @Singleton
-    public CreaturesService creaturesService(MobilityService mobilityService) {
-        return new CreaturesService(mobilityService);
+    public CreaturesService creaturesService(MobilityService mobilityService, ReproductionService reproductionService,
+                                             ObservationService observationService) {
+        return new CreaturesService(mobilityService, reproductionService, observationService);
+    }
+
+    @Provides
+    @Singleton
+    public ObservationService observationService() {
+        return new ObservationService();
+    }
+
+    @Provides
+    @Singleton
+    public ReproductionService reproductionService(CreatureGenerator creatureGenerator) {
+        return new ReproductionService(creatureGenerator);
     }
 
     @Provides

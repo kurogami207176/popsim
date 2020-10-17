@@ -2,6 +2,7 @@ package com.alaindroid.popsim.service;
 
 import com.alaindroid.popsim.model.Creature;
 import com.alaindroid.popsim.model.action.ActionType;
+import com.alaindroid.popsim.model.stats.CreatureSnapshot;
 import com.alaindroid.popsim.util.CreatureDistanceUtil;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ActionDecisionService {
 
-    public ActionDecision actionType(Creature creature, List<Creature> otherLives) {
+    public ActionDecision actionType(Creature creature, List<CreatureSnapshot> otherLives) {
         boolean canMove = creature.movementRange().canMove();
         ActionType actionType;
-        Optional<Creature> closest = CreatureDistanceUtil.findClosestEdibleLivingCreature(creature, otherLives);
+        Optional<CreatureSnapshot> closest = CreatureDistanceUtil.findClosestEdibleLivingCreature(creature, otherLives);
         if (!creature.body().alive()) {
             actionType = ActionType.DEAD;
         }
@@ -32,7 +33,7 @@ public class ActionDecisionService {
                         : ActionType.FIND_FOOD
                     : ActionType.WANDER;
             System.out.println(date() + " " + creature.name() + " decided to " + actionType + ". "
-                    + (closest.isPresent()? "Target: " + closest.get().name() : "NO Target found."));
+                    + (closest.isPresent()? "Target: " + closest.get().type() : "NO Target found."));
         }
         else {
             actionType = ActionType.EAT;
@@ -49,6 +50,6 @@ public class ActionDecisionService {
     @AllArgsConstructor
     public static class ActionDecision {
         private ActionType actionType;
-        private Optional<Creature> closest;
+        private Optional<CreatureSnapshot> closest;
     }
 }

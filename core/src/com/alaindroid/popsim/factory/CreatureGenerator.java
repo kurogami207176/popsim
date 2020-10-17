@@ -21,24 +21,35 @@ public class CreatureGenerator {
     private final DrawBox drawBox;
 
     public Creature create(CreatureType type) {
+        switch (type) {
+            case ANIMAL:
+                return create(type, "a", randomLocation());
+            case PLANT:
+                return create(type, "p", randomLocation());
+        }
+        return null;
+    }
+
+
+    public Creature create(CreatureType type, String name, Location location) {
 
         switch (type) {
             case ANIMAL:
-                Fauna fauna = new Fauna("generic_animal_" + counter++,
+                Fauna fauna = new Fauna(name + "." + counter++,
                         BASIC_MOTION,
                         BASIC_REACH);
                 return new Creature(fauna,
-                        randomLocation(),
+                        location,
                         type,
                         new Hunger(fauna.body().health().currentHealth(),
                                 fauna.body(),
                                 fauna.satiaty())
                 );
             case PLANT:
-                Flora flora = new Flora("generic_plant_" + counter++);
+                Flora flora = new Flora(name + "." + counter++);
                 return new Creature(
                         flora,
-                        randomLocation(),
+                        location,
                         type,
                         new Hunger(flora.body().health().currentHealth(),
                                 flora.body(),

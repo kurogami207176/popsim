@@ -129,7 +129,6 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
 
-        // https://mvnrepository.com/artifact/com.google.dagger/dagger
         api "com.google.dagger:dagger:$daggerVersion"
 //        api "com.google.dagger:dagger-android-support:$daggerVersion"
         annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"

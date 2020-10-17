@@ -9,11 +9,19 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @AllArgsConstructor
 public class Reproduction {
-    private float reproductionHealthLevel;
+    private float reproductionFullnessExcessLevel;
+    private int minLitter;
+    private int maxLitter;
     private float spawnRange;
     private float probability;
 
-    public boolean throwDice(Hunger level) {
-        return RandomUtil.nextFloat() < probability;
+    public boolean throwDice(Hunger hunger) {
+        return hunger.excessFullness() >= reproductionFullnessExcessLevel
+                ? RandomUtil.nextFloat() < probability
+                : false;
+    }
+
+    public float reproductionProgress(Hunger hunger) {
+        return hunger.excessFullness() / reproductionFullnessExcessLevel;
     }
 }

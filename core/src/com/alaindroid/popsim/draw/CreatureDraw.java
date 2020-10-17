@@ -1,7 +1,6 @@
 package com.alaindroid.popsim.draw;
 
 import com.alaindroid.popsim.model.Creature;
-import com.alaindroid.popsim.model.action.Action;
 import com.alaindroid.popsim.model.action.ActionType;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -37,7 +36,9 @@ public class CreatureDraw {
         drawCreature(shapeRenderer, x, y);
 
         drawActionPath(shapeRenderer, x, y);
-        drawReach(shapeRenderer, creature.desire(), x, y);
+        if (creature.desire() != null) {
+            drawReach(shapeRenderer, creature.desire(), x, y);
+        }
     }
 
     private void drawReach(ShapeRenderer shapeRenderer, ActionType desiredActionType, float x, float y) {
@@ -79,16 +80,30 @@ public class CreatureDraw {
         float y1 = y - radius - BAR_DIST;
         shapeRenderer.rectLine(x0, y0, x1, y1, 3);
         // hunger
+        drawHungerIndicator(shapeRenderer, x, y);
+        drawReproductionIndicator(shapeRenderer, x, y);
+        shapeRenderer.end();
+    }
+
+    private void drawHungerIndicator(ShapeRenderer shapeRenderer, float x, float y) {
         if (creature.hunger().isHungry()) {
             float xt0 = x;
-            float yt0 = y + radius * 2;
+            float yt0 = y + radius;
             float xt1 = x - radius;
-            float yt1 = y + radius;
+            float yt1 = y + radius * 2;
             float xt2 = x + radius;
-            float yt2 = y + radius;
+            float yt2 = y + radius * 2;
             shapeRenderer.triangle(xt0, yt0, xt1, yt1, xt2, yt2);
         }
-        shapeRenderer.end();
+    }
+
+    private void drawReproductionIndicator(ShapeRenderer shapeRenderer, float x, float y) {
+        float progress = creature.reproduction().reproductionProgress(creature.hunger());
+        float x0 = x - BAR_WIDTH;
+        float x1 = x0 + (2 * BAR_WIDTH) * progress;
+        float y0 = y + radius + BAR_DIST;
+        float y1 = y + radius + BAR_DIST;
+        shapeRenderer.rectLine(x0, y0, x1, y1, 3);
     }
 
     private void matchColor(ShapeRenderer shapeRenderer, ActionType actionType) {
